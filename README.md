@@ -54,8 +54,7 @@ python -m pip install xformers==0.0.27.post2 --no-deps \
 python -m pip install -r requirements.txt
 python -m pip install 'spconv-cu120>=2.3,<2.4'
 
-# Build/install the repository's nearest-neighbor extension.
-# Official gsplat 1.5.3 is installed by requirements.txt.
+# Build/install simple-knn-v2
 python -m pip install --no-build-isolation --no-deps ./submodules/simple-knn-v2
 
 ```
