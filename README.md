@@ -90,7 +90,7 @@ Each checkpoint is approximately 4.58 GB and includes the Pi3 backbone, Gaussian
 
 ## 3. Prepare the data
 
-Inference consumes the project's **preprocessed scene format**, including synchronized RGB views, camera calibration, sparse camera-space depth, non-sky masks and dynamic-object annotations. Raw Waymo TFRecords and the original nuScenes directory are not read directly. This inference release does not contain the raw-dataset conversion pipeline.
+数据处理代码参考 [https://github.com/chenshi3/UniSplat](https://github.com/chenshi3/UniSplat)
 
 Pass a root whose immediate subdirectories are the scenes to process. All scenes under that root are used unless `--scene-ids` is specified; the loader does not make a train/validation split.
 
