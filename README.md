@@ -31,7 +31,7 @@ MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometr
 
 ## 1. Conda environment
 
-The following installation targets **Linux, Python 3.10, PyTorch 2.4.0 and NVIDIA CUDA 12.1**. A CUDA-capable GPU and a compatible driver are required for rendering. The CUDA toolkit, including `nvcc`, and a compatible C++ compiler (for example GCC/G++ 11 or 12) are needed to build the local extension and the official gsplat rasterizer. The first import of gsplat compiles its CUDA kernels when a compatible prebuilt extension is unavailable.
+Recommended environment: **Linux, Python 3.10, PyTorch 2.4.0, and CUDA 12.1**, with a compatible GPU driver, `nvcc`, and GCC/G++ 11 or 12.
 
 From the repository root:
 
