@@ -44,7 +44,6 @@ conda activate mcsplat
 
 export CUDA_HOME="$CONDA_PREFIX"
 export PATH="$CUDA_HOME/bin:$PATH"
-export MAX_JOBS=4
 
 # Install matching PyTorch and attention wheels.
 python -m pip install torch==2.4.0 torchvision==0.19.0 \
