@@ -1,5 +1,3 @@
-# MCSplat
-
 **MCSplat: Multi-View Photometric and Geometric Consistent Feed-Forward Gaussian Splatting for Driving Scenes**
 
 <p align="center">
