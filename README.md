@@ -250,10 +250,6 @@ utils/inference.py      # PNG mosaics and scene videos
 utils/pi3_dependency.py # loader for external Pi3 modules
 ```
 
-## License and acknowledgements
+## Acknowledgement
 
-Original MCSplat code is released under the **Apache License 2.0**; see [LICENSE](LICENSE). Bundled third-party code and external dependencies retain their own licenses, as detailed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-The inference pipeline includes components with noncommercial or research-only terms, including DUSt3R-derived helpers, `simple-knn-v2` and external Pi3 modules. Apache-2.0 does not override those terms or grant commercial-use rights to the complete pipeline. VGGT-derived positional-embedding helpers also retain the VGGT License. Model weights and datasets have separate terms; the code license does not grant rights to them.
-
-We acknowledge Pi3, DINOv2, VGGT, DUSt3R, DPT/MiDaS, OpenPCDet, threestudio, gsplat, GLM and simple-knn for their contributions to this implementation.
+We thank the authors of [UniSplat](https://github.com/chenshi3/UniSplat), [gsplat](https://github.com/nerfstudio-project/gsplat), [Pi3](https://github.com/yyfz/Pi3), [bilateral-driving](https://github.com/BigCiLeng/bilateral-driving), [MoGe](https://github.com/microsoft/MoGe), and [SAM 3](https://github.com/facebookresearch/sam3) for sharing their code and projects with the community.
