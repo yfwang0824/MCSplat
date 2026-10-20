@@ -2,7 +2,13 @@
 
 **MCSplat: Multi-View Photometric and Geometric Consistent Feed-Forward Gaussian Splatting for Driving Scenes**
 
-[Paper (arXiv)](https://arxiv.org/abs/2610.25345) · [Project page](https://yfwang0824.github.io/mcsplat-project/) · [Model weights (Hugging Face)](https://huggingface.co/Yifeifei/MCSplat/tree/main)
+<p align="center">
+  📑 <a href="https://arxiv.org/abs/2610.25345">Paper (arXiv)</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  🌐 <a href="https://yfwang0824.github.io/mcsplat-project/">Project Page</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  🤗 <a href="https://huggingface.co/Yifeifei/MCSplat/tree/main">Hugging Face</a>
+</p>
 
 This repository provides inference code for the released Waymo and nuScenes checkpoints. It reconstructs a Gaussian scene from the current synchronized camera views, renders those views, applies the learned multi-camera color correction, and saves camera mosaics and scene videos.
 
