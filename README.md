@@ -59,8 +59,6 @@ python -m pip install --no-build-isolation --no-deps ./submodules/simple-knn-v2
 
 ```
 
-Pi3's positional encoding and camera head are included in this repository. Inference uses the PyTorch RoPE implementation; a separate Pi3 checkout or cuRoPE build is not required.
-
 Check the environment:
 
 ```bash
