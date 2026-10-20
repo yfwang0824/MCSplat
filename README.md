@@ -8,7 +8,7 @@
   🤗 <a href="https://huggingface.co/Yifeifei/MCSplat/tree/main">Hugging Face</a>
 </p>
 
-This repository provides inference code for the released Waymo and nuScenes checkpoints. It reconstructs a Gaussian scene from the current synchronized camera views, renders those views, applies the learned multi-camera color correction, and saves camera mosaics and scene videos.
+MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometrically consistent driving scenes from sparse multi-view images by disentangling camera-dependent appearance from shared geometry and introducing uncertainty-aware geometric self-supervision.
 
 <p align="center">
   <img src="assets/visualization2.png" alt="Qualitative comparison of ground truth, canonical prediction, UniSplat, and MCSplat" width="100%">
