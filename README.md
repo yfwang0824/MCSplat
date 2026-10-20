@@ -92,7 +92,7 @@ Each checkpoint is approximately 4.58 GB and includes the Pi3 backbone, Gaussian
 
 For data preprocessing code, please refer to [UniSplat](https://github.com/chenshi3/UniSplat).
 
-Pass a root whose immediate subdirectories are the scenes to process. All scenes under that root are used unless `--scene-ids` is specified; the loader does not make a train/validation split.
+Pass a root whose immediate subdirectories are the scenes to process. All scenes under that root are used unless `--scene-ids` is specified.
 
 ```text
 DATA_ROOT/
