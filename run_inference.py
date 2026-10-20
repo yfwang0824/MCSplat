@@ -4,7 +4,6 @@
 import argparse
 import logging
 import os
-import sys
 from pathlib import Path
 
 os.environ.setdefault("OPENCV_IO_ENABLE_OPENEXR", "1")
@@ -68,7 +67,6 @@ def load_model(checkpoint, cfg, device):
     import torch
     import torch.nn.functional as F
     from safetensors.torch import load_file
-    sys.path.insert(0, str(ROOT / "splatad"))
     from model.gaussian_head import GuassianHead
     from pi3.models.pi3 import Pi3
 

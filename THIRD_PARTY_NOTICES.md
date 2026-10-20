@@ -14,8 +14,7 @@ checkpoints and inference pipeline; this is not an unmodified upstream release.
 | Residual and feature-fusion blocks in `model/gaussian_head/head_layers.py` | [DPT](https://github.com/isl-org/DPT) / MiDaS | [MIT](licenses/DPT.txt); Copyright (c) 2021 Intel ISL |
 | Sparse-convolution and geometry helpers in `model/layers/spconv_unet.py` | [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) | Apache-2.0; OpenMMLab |
 | Type-annotation module `dataset/typing.py` | [threestudio](https://github.com/threestudio-project/threestudio) | Apache-2.0; upstream attribution retained in the module |
-| Custom gsplat rasterizer in `splatad/` | [gsplat](https://github.com/nerfstudio-project/gsplat) | [Apache-2.0](splatad/LICENSE); Nerfstudio Team. Includes local rendering and extension-build changes. |
-| GLM headers in `splatad/gsplat/cuda/csrc/third_party/glm/` | [GLM](https://github.com/g-truc/glm) | [Happy Bunny / MIT dual license](splatad/gsplat/cuda/csrc/third_party/glm/copying.txt); G-Truc Creation |
+| Official `gsplat==1.5.3` renderer, installed as an external dependency | [gsplat](https://github.com/nerfstudio-project/gsplat/tree/v1.5.3) | [Apache-2.0](https://github.com/nerfstudio-project/gsplat/blob/v1.5.3/LICENSE); Nerfstudio Team. Its bundled dependencies retain their own upstream notices. |
 | Modified nearest-neighbor CUDA extension in `submodules/simple-knn-v2/` | [simple-knn](https://gitlab.inria.fr/bkerbl/simple-knn) | [Gaussian-Splatting License](submodules/simple-knn-v2/LICENSE.md); Copyright (C) 2023 Inria, GRAPHDECO research group; research and evaluation terms apply |
 
 ## External Pi3 modules

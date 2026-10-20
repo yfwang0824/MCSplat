@@ -1,7 +1,5 @@
 import math
 import os
-import sys
-from pathlib import Path
 
 import numpy as np
 import torch
@@ -13,7 +11,6 @@ from einops import rearrange
 from dataset.typing import *
 
 
-_gsplat_import_error = None
 _supported_arch_tokens = {
     "7.0",
     "7.5",
@@ -42,27 +39,15 @@ else:
     # torch cpp_extension cannot parse; PTX fallback keeps kernels runnable.
     os.environ["TORCH_CUDA_ARCH_LIST"] = _fallback_arch_list
 try:
-    from gsplat.rendering import (
-        lidar_rasterization as gsplat_lidar_rasterization,
-        rasterization as gsplat_rasterization,
+    import gsplat
+except ImportError as error:
+    raise ImportError("Install the official renderer with `python -m pip install gsplat==1.5.3`.") from error
+if gsplat.__version__ != "1.5.3":
+    raise ImportError(
+        f"This inference release requires official gsplat==1.5.3; found {gsplat.__version__}. "
+        "Install the pinned version from requirements.txt."
     )
-except Exception as _err:
-    try:
-        _repo_root = Path(__file__).resolve().parents[2]
-        _splatad_root = _repo_root / "splatad"
-        if str(_splatad_root) not in sys.path:
-            sys.path.insert(0, str(_splatad_root))
-        for _mod_name in list(sys.modules.keys()):
-            if _mod_name == "gsplat" or _mod_name.startswith("gsplat."):
-                del sys.modules[_mod_name]
-        from gsplat.rendering import (
-            lidar_rasterization as gsplat_lidar_rasterization,
-            rasterization as gsplat_rasterization,
-        )
-    except Exception as _err2:
-        gsplat_rasterization = None
-        gsplat_lidar_rasterization = None
-        _gsplat_import_error = _err2
+from gsplat.rendering import rasterization as gsplat_rasterization
 
 
 def convert_pose(C2W):
@@ -203,12 +188,6 @@ class GaussianRenderer_dyn:
         self.znear = znear
         self.zfar = zfar
         self.bg_color = torch.tensor([0, 0, 0], dtype=torch.float32, device="cuda")
-        if gsplat_rasterization is None:
-            raise ImportError(
-                "Failed to import gsplat renderer. "
-                "Please ensure `splatad/gsplat` is available and buildable."
-            ) from _gsplat_import_error
-
         self.setup_functions()
 
 
@@ -288,8 +267,6 @@ class GaussianRenderer_dyn:
         semantics_per_view=None,
         colors_per_view=None,
         enable_cuda_fisher=False,
-        velocity=None,
-        frame_offsets=None,
         extra_feats_per_view=None,
     ):
         # keep API compatibility, but CUDA fisher buffer is no longer used in gsplat path
@@ -378,11 +355,6 @@ class GaussianRenderer_dyn:
         rendered_extra = [] if extra_dim > 0 else None
         for view_idx in range(num_views):
             means3d_view = means3d
-            if velocity is not None and frame_offsets is not None:
-                dt = float(frame_offsets[view_idx].item()) if frame_offsets.dim() >= 1 else 0.0
-                if dt != 0.0:
-                    means3d_view = means3d + velocity * dt
-
             viewmat = torch.inverse(convert_pose(c2w[view_idx]).float()).unsqueeze(0)
             colors_view = colors_per_view[view_idx]
             semantics_view = semantic_per_view[view_idx]
@@ -409,7 +381,6 @@ class GaussianRenderer_dyn:
                 scales=scales * float(scale_modifier),
                 opacities=opacities,
                 colors=gs_features,
-                velocities=None,
                 viewmats=viewmat,
                 Ks=K[view_idx : view_idx + 1],
                 width=int(widths[view_idx]),
@@ -521,7 +492,6 @@ class GaussianRenderer_dyn:
                 scales=scales * float(scale_modifier),
                 opacities=opacities,
                 colors=colors,
-                velocities=None,
                 viewmats=viewmat,
                 Ks=K[view_idx : view_idx + 1],
                 width=int(widths[view_idx]),
@@ -536,139 +506,7 @@ class GaussianRenderer_dyn:
 
         return torch.stack(out_maps, dim=0)
 
-    def render_lidar(
-        self,
-        gaussians: torch.Tensor,
-        lidar_supervision: Dict,
-        lidar_features: torch.Tensor = None,
-        velocity: torch.Tensor = None,
-    ) -> Dict:
-        """Render LiDAR supervision maps using gsplat lidar rasterization."""
-        if gsplat_lidar_rasterization is None:
-            raise ImportError(
-                "LiDAR rendering requires gsplat lidar_rasterization."
-            ) from _gsplat_import_error
-        if not isinstance(lidar_supervision, dict):
-            return {}
-
-        means3d = gaussians[:, 0:3].contiguous().float()
-        opacities = gaussians[:, 6].contiguous().float()
-        rotations = gaussians[:, 7:11].contiguous().float()
-        scales = gaussians[:, 11:14].contiguous().float()
-
-        viewmats = lidar_supervision.get("viewmats", None)
-        raster_pts = lidar_supervision.get("raster_pts", None)
-        tile_elev_bounds = lidar_supervision.get("tile_elevation_boundaries", None)
-        if (
-            not isinstance(viewmats, torch.Tensor)
-            or not isinstance(raster_pts, torch.Tensor)
-            or not isinstance(tile_elev_bounds, torch.Tensor)
-        ):
-            return {}
-
-        viewmats = viewmats.float()
-        raster_pts = raster_pts.float()
-        tile_elev_bounds = tile_elev_bounds.float()
-        num_lidars = viewmats.shape[0]
-        num_gaussians = means3d.shape[0]
-
-        if lidar_features is None:
-            lidar_features = gaussians[:, 3:6].contiguous().float().mean(
-                dim=-1, keepdim=True
-            )
-            lidar_features = lidar_features.unsqueeze(0).expand(num_lidars, -1, -1)
-        elif lidar_features.dim() == 2:
-            lidar_features = lidar_features.unsqueeze(0).expand(num_lidars, -1, -1)
-        lidar_features = lidar_features.contiguous().float()
-        if lidar_features.shape[:2] != (num_lidars, num_gaussians):
-            raise ValueError(
-                f"lidar_features shape mismatch: expected {(num_lidars, num_gaussians, 'D')}, "
-                f"got {tuple(lidar_features.shape)}"
-            )
-
-        linear_velocity = lidar_supervision.get("linear_velocity", None)
-        angular_velocity = lidar_supervision.get("angular_velocity", None)
-        rolling_shutter_time = lidar_supervision.get("rolling_shutter_time", None)
-        if linear_velocity is not None:
-            linear_velocity = linear_velocity.float()
-        if angular_velocity is not None:
-            angular_velocity = angular_velocity.float()
-        if rolling_shutter_time is not None:
-            rolling_shutter_time = rolling_shutter_time.float()
-
-        def _as_scalar(val, cast_fn, default):
-            if val is None:
-                return default
-            if isinstance(val, torch.Tensor):
-                if val.numel() == 0:
-                    return default
-                return cast_fn(val.reshape(-1)[0].item())
-            return cast_fn(val)
-
-        render_feats, render_alphas, _alpha_sum_until_points, meta = (
-            gsplat_lidar_rasterization(
-                means=means3d,
-                quats=rotations,
-                scales=scales,
-                opacities=opacities,
-                lidar_features=lidar_features,
-                velocities=velocity,
-                viewmats=viewmats,
-                raster_pts=raster_pts,
-                tile_elevation_boundaries=tile_elev_bounds,
-                linear_velocity=linear_velocity,
-                angular_velocity=angular_velocity,
-                rolling_shutter_time=rolling_shutter_time,
-                min_azimuth=_as_scalar(
-                    lidar_supervision.get("min_azimuth", -180.0), float, -180.0
-                ),
-                max_azimuth=_as_scalar(
-                    lidar_supervision.get("max_azimuth", 180.0), float, 180.0
-                ),
-                min_elevation=_as_scalar(
-                    lidar_supervision.get("min_elevation", -80.0), float, -80.0
-                ),
-                max_elevation=_as_scalar(
-                    lidar_supervision.get("max_elevation", 80.0), float, 80.0
-                ),
-                n_elevation_channels=_as_scalar(
-                    lidar_supervision.get("n_elevation_channels", raster_pts.shape[1]),
-                    int,
-                    int(raster_pts.shape[1]),
-                ),
-                azimuth_resolution=_as_scalar(
-                    lidar_supervision.get("azimuth_resolution", 0.1), float, 0.1
-                ),
-                tile_width=_as_scalar(
-                    lidar_supervision.get("tile_width", 32), int, 32
-                ),
-                tile_height=_as_scalar(
-                    lidar_supervision.get("tile_height", 8), int, 8
-                ),
-                near_plane=float(self.znear),
-                far_plane=float(self.zfar),
-                packed=False,
-                # LOS (line-of-sight) supervision is disabled.
-                # expected_range / feature_maps can still be consumed by loss
-                # and visualization paths.
-                compute_alpha_sum_until_points=False,
-                use_depth_compensation=bool(
-                    lidar_supervision.get("use_depth_compensation", True)
-                ),
-            )
+    def render_lidar(self, *args, **kwargs):
+        raise NotImplementedError(
+            "LiDAR rendering is outside the released camera-view inference pipeline."
         )
-
-        feature_maps = render_feats[..., :-1].permute(0, 3, 1, 2).contiguous()
-        expected_range = render_feats[..., -1:].permute(0, 3, 1, 2).contiguous()
-        out = {
-            "feature_maps": feature_maps,
-            "expected_range": expected_range,
-            "render_alphas": render_alphas.permute(0, 3, 1, 2).contiguous(),
-            "meta": meta,
-        }
-        return out
-
-
-    
-  
-  

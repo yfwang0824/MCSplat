@@ -16,7 +16,7 @@ MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometr
 
 ## 1. Conda environment
 
-The following installation targets **Linux, Python 3.10, PyTorch 2.4.0 and NVIDIA CUDA 12.1**. A CUDA-capable GPU and a compatible driver are required for rendering. The CUDA toolkit, including `nvcc`, and a compatible C++ compiler (for example GCC/G++ 11 or 12) are needed to build the local extensions. The first rendering run also compiles the bundled Gaussian rasterizer.
+The following installation targets **Linux, Python 3.10, PyTorch 2.4.0 and NVIDIA CUDA 12.1**. A CUDA-capable GPU and a compatible driver are required for rendering. The CUDA toolkit, including `nvcc`, and a compatible C++ compiler (for example GCC/G++ 11 or 12) are needed to build the local extension and the official gsplat rasterizer. The first import of gsplat compiles its CUDA kernels when a compatible prebuilt extension is unavailable.
 
 From the repository root:
 
@@ -40,9 +40,9 @@ python -m pip install xformers==0.0.27.post2 --no-deps \
 python -m pip install -r requirements.txt
 python -m pip install 'spconv-cu120>=2.3,<2.4'
 
-# Build/install the repository's nearest-neighbor extension and rasterizer.
+# Build/install the repository's nearest-neighbor extension.
+# Official gsplat 1.5.3 is installed by requirements.txt.
 python -m pip install --no-build-isolation --no-deps ./submodules/simple-knn-v2
-python -m pip install --no-build-isolation --no-deps -e ./splatad
 
 ```
 
@@ -82,11 +82,11 @@ Check the environment:
 ```bash
 nvcc --version
 python -c "import torch; print(torch.__version__, torch.version.cuda); assert torch.cuda.is_available()"
-python -c "import torch, spconv.pytorch, xformers; from simple_knn_v2._C import distCUDACross; import gsplat"
+python -c "import torch, spconv.pytorch, xformers; from simple_knn_v2._C import distCUDACross; import gsplat; assert gsplat.__version__ == '1.5.3'; print('gsplat', gsplat.__version__)"
 python -c "from utils.pi3_dependency import RoPE2D, PositionGetter, CameraHead; print('External Pi3 dependencies are available')"
 ```
 
-Use the **bundled** `splatad` rasterizer: the model expects its local changes. If PyTorch or CUDA is changed, rebuild the extensions against the new environment. PyTorch's supported version combinations are documented [here](https://pytorch.org/get-started/previous-versions/), and spconv installation options are documented [here](https://github.com/traveller59/spconv#install).
+Rendering uses the **official `gsplat==1.5.3`** package installed from PyPI. The released inference path renders synchronized camera views using the standard rasterization API; it does not require a separate local rasterizer checkout. If PyTorch or CUDA is changed, rebuild the extensions against the new environment. PyTorch's supported version combinations are documented [here](https://pytorch.org/get-started/previous-versions/), and spconv installation options are documented [here](https://github.com/traveller59/spconv#install).
 
 For vendor accelerators such as PPU, keep the vendor's compatible PyTorch, torchvision, xformers and spconv packages and build the local extensions with that vendor's toolkit. The NVIDIA wheel commands above are for a separate NVIDIA environment.
 
@@ -244,7 +244,6 @@ configs/                # Waymo and nuScenes inference settings
 dataset/                # current-frame data loading and geometry helpers
 model/                  # Gaussian head, photometric correction and rendering
 pi3/                    # Pi3 backbone and required DINO/transformer layers
-splatad/                # bundled gsplat rasterizer and CUDA sources
 submodules/simple-knn-v2/ # nearest-neighbor CUDA extension
 utils/inference.py      # PNG mosaics and scene videos
 utils/pi3_dependency.py # loader for external Pi3 modules
