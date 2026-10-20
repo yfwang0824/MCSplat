@@ -70,8 +70,6 @@ python -c "from pi3.models.layers.pos_embed import RoPE2D, PositionGetter; from 
 
 Rendering uses the **official `gsplat==1.5.3`** package installed from PyPI. The released inference path renders synchronized camera views using the standard rasterization API; it does not require a separate local rasterizer checkout. If PyTorch or CUDA is changed, rebuild the extensions against the new environment. PyTorch's supported version combinations are documented [here](https://pytorch.org/get-started/previous-versions/), and spconv installation options are documented [here](https://github.com/traveller59/spconv#install).
 
-For vendor accelerators such as PPU, keep the vendor's compatible PyTorch, torchvision, xformers and spconv packages and build the local extensions with that vendor's toolkit. The NVIDIA wheel commands above are for a separate NVIDIA environment.
-
 ## 2. Download pretrained weights
 
 ```bash
