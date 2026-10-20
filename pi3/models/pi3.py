@@ -5,7 +5,8 @@ from copy import deepcopy
 
 from .dinov2.layers import Mlp
 from ..utils.geometry import homogenize_points
-from utils.pi3_dependency import RoPE2D, PositionGetter, CameraHead
+from .layers.pos_embed import RoPE2D, PositionGetter
+from .layers.camera_head import CameraHead
 from .layers.block import BlockRope
 from .layers.attention import FlashAttentionRope
 from .layers.transformer_head import TransformerDecoder, LinearPts3d
@@ -33,7 +34,6 @@ class Pi3(nn.Module, PyTorchModelHubMixin):
         self.pos_type = pos_type if pos_type is not None else 'none'
         self.rope=None
         if self.pos_type.startswith('rope'): # eg rope100 
-            if RoPE2D is None: raise ImportError("Cannot find cuRoPE2D, please install it following the README instructions")
             freq = float(self.pos_type[len('rope'):])
             self.rope = RoPE2D(freq=freq)
             self.position_getter = PositionGetter()

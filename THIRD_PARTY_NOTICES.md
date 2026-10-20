@@ -17,10 +17,10 @@ checkpoints and inference pipeline; this is not an unmodified upstream release.
 | Official `gsplat==1.5.3` renderer, installed as an external dependency | [gsplat](https://github.com/nerfstudio-project/gsplat/tree/v1.5.3) | [Apache-2.0](https://github.com/nerfstudio-project/gsplat/blob/v1.5.3/LICENSE); Nerfstudio Team. Its bundled dependencies retain their own upstream notices. |
 | Modified nearest-neighbor CUDA extension in `submodules/simple-knn-v2/` | [simple-knn](https://gitlab.inria.fr/bkerbl/simple-knn) | [Gaussian-Splatting License](submodules/simple-knn-v2/LICENSE.md); Copyright (C) 2023 Inria, GRAPHDECO research group; research and evaluation terms apply |
 
-## External Pi3 modules
+## Included Pi3 modules
 
-`utils/pi3_dependency.py` loads the following files from an external installation
-at `MCSPLAT_PI3_ROOT`. Their source is not included in this repository.
+The following files are included at their original Pi3 package paths, with
+their source attributions and file-specific notices retained.
 
 - `pi3/models/layers/pos_embed.py`: the file declares CC BY-NC-SA 4.0 and credits
   Naver/CroCo. See the [pinned Pi3 source](https://github.com/yyfz/Pi3/blob/9fa3ddb3f8d53041f8b2738df404f62223bbaa7b/pi3/models/layers/pos_embed.py).
@@ -32,7 +32,6 @@ at `MCSPLAT_PI3_ROOT`. Their source is not included in this repository.
 - Optional cuRoPE is distributed separately by [CroCo](https://github.com/naver/croco).
   Follow its upstream license and build instructions if installing it.
 
-Downloading a dependency separately does not change its license conditions.
 The root Apache-2.0 license does not grant unrestricted commercial use of the
 complete dependency stack. Pretrained weights, input datasets and installed
 Python/CUDA packages retain their own terms.

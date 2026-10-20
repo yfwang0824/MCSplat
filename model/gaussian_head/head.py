@@ -23,7 +23,7 @@ from .unet import UNet
 from .head_layers import _make_scratch, _make_fusion_block_custom, custom_interpolate
 from simple_knn_v2._C import distCUDACross
 from pi3.models.layers.transformer_head import TransformerDecoder
-from utils.pi3_dependency import RoPE2D, PositionGetter
+from pi3.models.layers.pos_embed import RoPE2D, PositionGetter
 
 def quaternion_to_matrix(quaternions: torch.Tensor, eps: float = 1e-8) -> torch.Tensor:
     r, i, j, k = torch.unbind(quaternions, dim=-1)

@@ -59,36 +59,7 @@ python -m pip install --no-build-isolation --no-deps ./submodules/simple-knn-v2
 
 ```
 
-### External Pi3 dependencies
-
-The Pi3 backbone and Gaussian head require `RoPE2D`, `PositionGetter` and `CameraHead`. These modules are provided by an **external Pi3 dependency**. Download the required source files and upstream licenses to a directory outside MCSplat:
-
-```bash
-export MCSPLAT_PI3_ROOT="$HOME/.cache/mcsplat-deps/Pi3"
-mkdir -p "$MCSPLAT_PI3_ROOT/pi3/models/layers"
-
-# Pin the upstream revision for reproducible inference.
-curl --fail --location --retry 3 \
-  https://raw.githubusercontent.com/yyfz/Pi3/9fa3ddb3f8d53041f8b2738df404f62223bbaa7b/pi3/models/layers/pos_embed.py \
-  --output "$MCSPLAT_PI3_ROOT/pi3/models/layers/pos_embed.py"
-curl --fail --location --retry 3 \
-  https://raw.githubusercontent.com/yyfz/Pi3/9fa3ddb3f8d53041f8b2738df404f62223bbaa7b/pi3/models/layers/camera_head.py \
-  --output "$MCSPLAT_PI3_ROOT/pi3/models/layers/camera_head.py"
-curl --fail --location --retry 3 \
-  https://raw.githubusercontent.com/yyfz/Pi3/9fa3ddb3f8d53041f8b2738df404f62223bbaa7b/LICENSE \
-  --output "$MCSPLAT_PI3_ROOT/LICENSE"
-curl --fail --location --retry 3 \
-  https://raw.githubusercontent.com/nianticlabs/marepo/9a45e2bb07e5bb8cb997620088d352b439b13e0e/LICENSE \
-  --output "$MCSPLAT_PI3_ROOT/MAREPO-LICENSE"
-```
-
-Set `MCSPLAT_PI3_ROOT` in each inference shell, or add that export to your Conda environment's activation script. It may also point to an existing compatible Pi3 checkout. Only these two modules are imported; the upstream repository's other dependencies and pretrained weights are not required.
-
-The validated installation uses Pi3's PyTorch RoPE fallback. **cuRoPE is optional** and is not bundled or required by these inference commands. Its upstream build instructions are available in [CroCo](https://github.com/naver/croco#preparation); a native extension must support your accelerator, tensor layout and precision before it can replace the fallback.
-
-The external [Pi3 positional-encoding source](https://github.com/yyfz/Pi3/blob/9fa3ddb3f8d53041f8b2738df404f62223bbaa7b/pi3/models/layers/pos_embed.py) declares **CC BY-NC-SA 4.0**. It retains its file-specific license; downloading it separately does not remove its upstream usage conditions.
-
-The external camera head attributes its residual block to [MAREPO](https://github.com/nianticlabs/marepo/blob/9a45e2bb07e5bb8cb997620088d352b439b13e0e/transformer/transformer.py). MAREPO's upstream license has noncommercial-use and redistribution restrictions; consult the downloaded `MAREPO-LICENSE` before use. These upstream modules are not relicensed by this repository.
+Pi3's positional encoding and camera head are included in this repository. Inference uses the PyTorch RoPE implementation; a separate Pi3 checkout or cuRoPE build is not required.
 
 Check the environment:
 
@@ -96,7 +67,7 @@ Check the environment:
 nvcc --version
 python -c "import torch; print(torch.__version__, torch.version.cuda); assert torch.cuda.is_available()"
 python -c "import torch, spconv.pytorch, xformers; from simple_knn_v2._C import distCUDACross; import gsplat; assert gsplat.__version__ == '1.5.3'; print('gsplat', gsplat.__version__)"
-python -c "from utils.pi3_dependency import RoPE2D, PositionGetter, CameraHead; print('External Pi3 dependencies are available')"
+python -c "from pi3.models.layers.pos_embed import RoPE2D, PositionGetter; from pi3.models.layers.camera_head import CameraHead; print('Pi3 modules are available')"
 ```
 
 Rendering uses the **official `gsplat==1.5.3`** package installed from PyPI. The released inference path renders synchronized camera views using the standard rasterization API; it does not require a separate local rasterizer checkout. If PyTorch or CUDA is changed, rebuild the extensions against the new environment. PyTorch's supported version combinations are documented [here](https://pytorch.org/get-started/previous-versions/), and spconv installation options are documented [here](https://github.com/traveller59/spconv#install).
@@ -259,7 +230,6 @@ model/                  # Gaussian head, photometric correction and rendering
 pi3/                    # Pi3 backbone and required DINO/transformer layers
 submodules/simple-knn-v2/ # nearest-neighbor CUDA extension
 utils/inference.py      # PNG mosaics and scene videos
-utils/pi3_dependency.py # loader for external Pi3 modules
 ```
 
 ## Acknowledgement
