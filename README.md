@@ -10,6 +10,10 @@
 
 This repository provides inference code for the released Waymo and nuScenes checkpoints. It reconstructs a Gaussian scene from the current synchronized camera views, renders those views, applies the learned multi-camera color correction, and saves camera mosaics and scene videos.
 
+<p align="center">
+  <img src="assets/visualization2.png" alt="Qualitative comparison of ground truth, canonical prediction, UniSplat, and MCSplat" width="100%">
+</p>
+
 ## 1. Conda environment
 
 The following installation targets **Linux, Python 3.10, PyTorch 2.4.0 and NVIDIA CUDA 12.1**. A CUDA-capable GPU and a compatible driver are required for rendering. The CUDA toolkit, including `nvcc`, and a compatible C++ compiler (for example GCC/G++ 11 or 12) are needed to build the local extensions. The first rendering run also compiles the bundled Gaussian rasterizer.
