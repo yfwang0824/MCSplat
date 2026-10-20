@@ -111,18 +111,6 @@ DATA_ROOT/
         └── ...
 ```
 
-For image frame string `F` (for example `000000`) and zero-based camera `c`, the exact filenames are:
-
-| Content | Relative path inside a scene |
-| --- | --- |
-| RGB image | `images/{F}_{c}.png` |
-| Calibration | `{F[1:]}_{c+1}.npz` |
-| Sparse depth | `{F[1:]}_{c+1}.exr` |
-| Non-sky mask | `{F[1:]}_{c+1}_moge_mask.png` |
-| Dynamic-instance mask | `dynamics/dynamic_mask_{int(F)}_{c+1}.npz` |
-
-Calibration archives must contain `intrinsics` (3×3), `cam2lidar` (4×4 camera-to-LiDAR transform) and `cam2world` (4×4 camera-to-world transform). Dynamic-mask archives contain the instance-ID image under `data`. `dynamic_infos.json` stores speeds under `track_id_infos[str(int(F))][str(c+1)][track_id]["speed"]`; mask IDs follow `int(hashlib.md5(str(track_id).encode("utf-8")).hexdigest(), 16) % 65535 + 1`. Instances with speed norm below 0.2 are treated as static. Keep this naming and calibration convention when using an existing preprocessed dataset.
-
 Camera conventions and released resolutions:
 
 | Dataset | Camera IDs | Input size (width × height) | Render size |
