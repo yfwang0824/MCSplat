@@ -26,7 +26,6 @@ MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometr
 - [4. Waymo inference](#4-waymo-inference)
 - [5. nuScenes inference](#5-nuscenes-inference)
 - [6. Options and validation](#6-options-and-validation)
-- [Code layout](#code-layout)
 - [Acknowledgement](#acknowledgement)
 
 ## 1. Conda environment
@@ -201,18 +200,6 @@ python run_inference.py \
 | `--output-dir PATH` | Output root, default `outputs/<dataset>` |
 
 The inference path uses batch size 1 and runs the backbone in mixed precision, followed by the Gaussian head in float32. It preserves the checkpoint's reference cameras `[0, 3, 4]` during bilateral color correction. Outputs contain current-frame RGB renders; training, temporal evaluation and metric computation are outside this release.
-
-## Code layout
-
-```text
-run_inference.py         # checkpoint loading and inference entry point
-configs/                # Waymo and nuScenes inference settings
-dataset/                # current-frame data loading and geometry helpers
-model/                  # Gaussian head, photometric correction and rendering
-pi3/                    # Pi3 backbone and required DINO/transformer layers
-submodules/simple-knn-v2/ # nearest-neighbor CUDA extension
-utils/inference.py      # PNG mosaics and scene videos
-```
 
 ## Acknowledgement
 
