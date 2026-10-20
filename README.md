@@ -14,6 +14,21 @@ MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometr
   <img src="assets/visualization2.png" alt="Qualitative comparison of ground truth, canonical prediction, UniSplat, and MCSplat" width="100%">
 </p>
 
+<p align="center">
+  <img src="assets/crosslane-nvs.png" alt="Cross-lane novel view synthesis comparison of UniSplat and MCSplat with a 1.8 m leftward shift" width="100%">
+</p>
+
+## Contents
+
+- [1. Conda environment](#1-conda-environment)
+- [2. Download pretrained weights](#2-download-pretrained-weights)
+- [3. Prepare the data](#3-prepare-the-data)
+- [4. Waymo inference](#4-waymo-inference)
+- [5. nuScenes inference](#5-nuscenes-inference)
+- [6. Options and validation](#6-options-and-validation)
+- [Code layout](#code-layout)
+- [Acknowledgement](#acknowledgement)
+
 ## 1. Conda environment
 
 The following installation targets **Linux, Python 3.10, PyTorch 2.4.0 and NVIDIA CUDA 12.1**. A CUDA-capable GPU and a compatible driver are required for rendering. The CUDA toolkit, including `nvcc`, and a compatible C++ compiler (for example GCC/G++ 11 or 12) are needed to build the local extension and the official gsplat rasterizer. The first import of gsplat compiles its CUDA kernels when a compatible prebuilt extension is unavailable.
