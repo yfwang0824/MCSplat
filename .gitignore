@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+outputs/
+work_dirs/
+*.safetensors
+*.pth
+checkpoints/
+build/
+dist/
+*.egg-info/
+*.so
+.cache/
+.DS_Store
+.env
+.env.*

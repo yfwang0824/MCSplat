@@ -1,0 +1,6 @@
+[build-system]
+# -- Everything needed just to run setup.py ---------------
+requires = [
+    "setuptools>=62",      # the build backend
+]
+build-backend = "setuptools.build_meta"

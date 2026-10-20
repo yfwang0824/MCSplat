@@ -1,0 +1,17 @@
+# Install the CUDA-specific torch, torchvision, xformers and spconv wheels first;
+# see README.md. Keep vendor-provided accelerator wheels on non-NVIDIA systems.
+numpy==1.26.4
+Pillow==10.4.0
+opencv-python-headless==4.10.0.84
+omegaconf==2.3.0
+safetensors>=0.4.5,<1
+huggingface-hub>=0.34,<2
+einops==0.8.1
+jaxtyping==0.2.34
+typeguard==2.13.3
+tqdm>=4.66,<5
+rich>=13.9,<15
+ninja>=1.11
+packaging>=24
+setuptools>=69,<76
+wheel

@@ -1,0 +1,8 @@
+name: mcsplat
+channels:
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - cuda-toolkit=12.1

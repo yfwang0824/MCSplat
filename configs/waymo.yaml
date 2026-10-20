@@ -1,0 +1,61 @@
+Model:
+  Gaussian_head:
+    sky_mask: 400.0
+    sky_mask_side_cameras: 450.0
+    sky_mask_side_padding_opacity_zero: true
+    offset_scale: 2.0
+    max_scale: 0.1
+    max_scale_voxel: 0.2
+    pts_range:
+    - -72.0
+    - -72.0
+    - -4.0
+    - 72.0
+    - 72.0
+    - 12.0
+    voxel_size:
+    - 0.1
+    - 0.1
+    - 0.2
+    resolution:
+    - 518
+    - 350
+    voxel_stream_quantile: 0.6
+    voxel_stream_quantile_outview: 0.6
+    voxel_stream_opacity_thre: -1
+    voxel_stream_inview_num: 300000
+    voxel_stream_outview_num: 400000
+    sky_gaussian_scale: 1.0
+    sky_gaussian_offset: 2.0
+    sky_geometry_mode: cylindrical
+    sky_cylinder_radius: 400.0
+    sky_cylinder_center_mode: ego_origin
+    sky_cylinder_max_abs_z: 200.0
+    voxel_gs_num: 2
+    bilateral_grid_sizes: 2,2,1;4,4,2;8,8,4
+    bilateral_grid_guidance_factors: 4,4,2
+    bilateral_grid_appearance_feature_dim: 384
+    bilateral_grid_chroma_enabled: true
+    bilateral_grid_chroma_num_layers: 3
+    bilateral_grid_chroma_ff_dim: 2048
+    bilateral_grid_chroma_kv_mode: residual
+    bilateral_grid_chroma_use_cam_id_embed: false
+    use_bilateral_grid_transformer: true
+    num_cameras: 5
+    bilateral_grid_chroma_ref_cameras:
+    - 0
+    - 3
+    - 4
+Dataset:
+  num_cameras: 5
+  resolution:
+  - 518
+  - 350
+Inference:
+  reference_cameras:
+  - 0
+  - 3
+  - 4
+  min_points: 50
+  rgb_residual_threshold: 0.05
+  rgb_refit_min_points: 128
