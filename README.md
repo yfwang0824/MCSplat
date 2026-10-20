@@ -118,8 +118,6 @@ Camera conventions and released resolutions:
 | Waymo | `0=front`, `1=front left`, `2=front right`, `3=side left`, `4=side right` | 518 × 350 | 518 × 350 |
 | nuScenes | `0=front`, `1=front left`, `2=front right`, `3=back left`, `4=back right`, `5=back` | 406 × 224 | 400 × 224 |
 
-The loader resizes each camera image independently and updates the intrinsics and sparse-depth projections. The released Waymo configuration does not pad the side-camera images. OpenEXR reading is enabled by the inference entry point.
-
 ## 4. Waymo inference
 
 ```bash
