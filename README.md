@@ -86,7 +86,7 @@ checkpoints/
 └── nuscenes/model.safetensors
 ```
 
-Each checkpoint is approximately 4.58 GB and includes the Pi3 backbone, Gaussian head and bilateral-grid transformer. Separate Pi3 or DINO checkpoint downloads are not required. Use the checkpoint corresponding to the dataset: their color-correction configurations differ. A checkpoint outside this directory can be selected with `--checkpoint /path/to/model.safetensors`.
+Each checkpoint is approximately 4.58 GB and includes the Pi3 backbone, Gaussian head and bilateral-grid transformer.
 
 ## 3. Prepare the data
 
