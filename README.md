@@ -257,14 +257,3 @@ Original MCSplat code is released under the **Apache License 2.0**; see [LICENSE
 The inference pipeline includes components with noncommercial or research-only terms, including DUSt3R-derived helpers, `simple-knn-v2` and external Pi3 modules. Apache-2.0 does not override those terms or grant commercial-use rights to the complete pipeline. VGGT-derived positional-embedding helpers also retain the VGGT License. Model weights and datasets have separate terms; the code license does not grant rights to them.
 
 We acknowledge Pi3, DINOv2, VGGT, DUSt3R, DPT/MiDaS, OpenPCDet, threestudio, gsplat, GLM and simple-knn for their contributions to this implementation.
-
-## Citation
-
-```bibtex
-@article{wang2026mcsplat,
-  title={MCSplat: Multi-View Photometric and Geometric Consistent Feed-Forward Gaussian Splatting for Driving Scenes},
-  author={Wang, Yifei and others},
-  journal={arXiv preprint arXiv:2610.25345},
-  year={2026}
-}
-```
