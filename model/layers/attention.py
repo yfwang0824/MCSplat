@@ -1,4 +1,4 @@
-# Modified for MCSplat inference; see THIRD_PARTY_NOTICES.md.
+# Modified for MCSplat inference.
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 #
 # This source code is licensed under the Apache License, Version 2.0

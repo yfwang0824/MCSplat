@@ -2,8 +2,7 @@
 # All rights reserved.
 #
 # VGGT positional embedding and UV-grid helpers retain the VGGT License
-# in ../../licenses/VGGT.txt. Modified for MCSplat inference; see
-# ../../THIRD_PARTY_NOTICES.md for the scope of third-party code.
+# in ../../licenses/VGGT.txt. Modified for MCSplat inference.
 
 import torch
 import torch.nn as nn

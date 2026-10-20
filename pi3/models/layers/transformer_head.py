@@ -1,6 +1,6 @@
 # Pi3 transformer heads, including LinearPts3d adapted from DUSt3R.
 # The DUSt3R-derived portions retain CC BY-NC-SA 4.0; see
-# ../../../THIRD_PARTY_NOTICES.md. Modified for MCSplat inference.
+# ../../../licenses/DUST3R.txt. Modified for MCSplat inference.
 
 from .attention import FlashAttentionRope
 from .block import BlockRope

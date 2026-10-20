@@ -1,5 +1,5 @@
 # Contains helpers adapted from OpenPCDet (OpenMMLab), Apache-2.0.
-# Modified for MCSplat inference; see ../../THIRD_PARTY_NOTICES.md.
+# Modified for MCSplat inference.
 from functools import partial
 
 import torch
