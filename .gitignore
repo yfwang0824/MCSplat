@@ -5,6 +5,7 @@ work_dirs/
 *.safetensors
 *.pth
 checkpoints/
+data/
 build/
 dist/
 *.egg-info/

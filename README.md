@@ -6,6 +6,8 @@
   🌐 <a href="https://yfwang0824.github.io/mcsplat-project/">Project Page</a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   🤗 <a href="https://huggingface.co/Yifeifei/MCSplat/tree/main">Hugging Face</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  📦 <a href="https://huggingface.co/datasets/Yifeifei/MCSplat-data">Example Data</a>
 </p>
 
 MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometrically consistent driving scenes from sparse multi-view images by disentangling camera-dependent appearance from shared geometry and introducing uncertainty-aware geometric self-supervision.
@@ -91,6 +93,23 @@ Each checkpoint is approximately 4.58 GB and includes the Pi3 backbone, Gaussian
 
 For data preprocessing code, please refer to [UniSplat](https://github.com/chenshi3/UniSplat).
 
+Download the preprocessed example scenes from [Hugging Face](https://huggingface.co/datasets/Yifeifei/MCSplat-data): Waymo `008`, `040`, `046`, `070` and nuScenes `600`, `690`.
+
+```bash
+hf download Yifeifei/MCSplat-data --repo-type dataset \
+  --local-dir data/archives
+
+mkdir -p data/waymo/validation data/nuscenes/val
+for scene in 008 040 046 070; do
+  tar -xzf "data/archives/waymo/${scene}.tar.gz" -C data/waymo/validation
+done
+for scene in 600 690; do
+  tar -xzf "data/archives/nuscenes/${scene}.tar.gz" -C data/nuscenes/val
+done
+```
+
+Use `data/waymo/validation` or `data/nuscenes/val` as `--data-path` in the inference commands below. Each archive extracts into its scene directory.
+
 Pass a root whose immediate subdirectories are the scenes to process. All scenes under that root are used unless `--scene-ids` is specified.
 
 ```text
@@ -122,7 +141,7 @@ Camera conventions and released resolutions:
 ```bash
 python run_inference.py \
   --dataset waymo \
-  --data-path /path/to/preprocessed/waymo/validation \
+  --data-path data/waymo/validation \
   --output-dir outputs/waymo
 ```
 
@@ -131,13 +150,13 @@ Run selected scene directory IDs, or verify one frame first:
 ```bash
 python run_inference.py \
   --dataset waymo \
-  --data-path /path/to/preprocessed/waymo/validation \
-  --scene-ids 000,001 --resume
+  --data-path data/waymo/validation \
+  --scene-ids 008,040 --resume
 
 python run_inference.py \
   --dataset waymo \
-  --data-path /path/to/preprocessed/waymo/validation \
-  --scene-ids 000 --max-frames 1 --no-video
+  --data-path data/waymo/validation \
+  --scene-ids 008 --max-frames 1 --no-video
 ```
 
 Each output PNG is a horizontal mosaic in camera order `[3, 1, 0, 2, 4]`:
@@ -152,7 +171,7 @@ outputs/waymo/render_current/combined/{scene}/current_10fps.mp4
 ```bash
 python run_inference.py \
   --dataset nuscenes \
-  --data-path /path/to/preprocessed/nuscenes/val \
+  --data-path data/nuscenes/val \
   --output-dir outputs/nuscenes
 ```
 
@@ -161,13 +180,13 @@ Select scenes or run a single-frame check:
 ```bash
 python run_inference.py \
   --dataset nuscenes \
-  --data-path /path/to/preprocessed/nuscenes/val \
-  --scene-ids 002,011 --resume
+  --data-path data/nuscenes/val \
+  --scene-ids 600,690 --resume
 
 python run_inference.py \
   --dataset nuscenes \
-  --data-path /path/to/preprocessed/nuscenes/val \
-  --scene-ids 002 --max-frames 1 --no-video
+  --data-path data/nuscenes/val \
+  --scene-ids 600 --max-frames 1 --no-video
 ```
 
 Each output PNG is a 2×3 mosaic: top row `[1, 0, 2]`, bottom row `[3, 5, 4]`:
@@ -184,8 +203,8 @@ outputs/nuscenes/render_current/combined/{scene}/current_10fps.mp4
 ```bash
 python run_inference.py \
   --dataset waymo \
-  --data-path /path/to/preprocessed/waymo/validation \
-  --scene-ids 000 --check-only
+  --data-path data/waymo/validation \
+  --scene-ids 008 --check-only
 ```
 
 | Option | Meaning |
