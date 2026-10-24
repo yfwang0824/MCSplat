@@ -28,6 +28,7 @@ MCSplat is a feed-forward Gaussian splatting framework that reconstructs geometr
 - [4. Waymo inference](#4-waymo-inference)
 - [5. nuScenes inference](#5-nuscenes-inference)
 - [6. Options and validation](#6-options-and-validation)
+- [Citation](#citation)
 - [Acknowledgement](#acknowledgement)
 
 ## 1. Conda environment
@@ -219,6 +220,17 @@ python run_inference.py \
 | `--output-dir PATH` | Output root, default `outputs/<dataset>` |
 
 The inference path uses batch size 1 and runs the backbone in mixed precision, followed by the Gaussian head in float32. It preserves the checkpoint's reference cameras `[0, 3, 4]` during bilateral color correction. Outputs contain current-frame RGB renders; training, temporal evaluation and metric computation are outside this release.
+
+## Citation
+
+```bibtex
+@article{wang2026mcsplat,
+  title={MCSplat: Multi-View Photometric and Geometric Consistent Feed-Forward Gaussian Splatting for Driving Scenes},
+  author={Wang, Yifei and Tian, Wei and Bao, Wenhua and Zhou, Jia and Wang, Hanshi and Ge, Fudong and Wu, Jianhua and Yuan, Shuai and Zhang, Zhipeng and Liu, Xingliang and others},
+  journal={arXiv preprint arXiv:2610.25345},
+  year={2026}
+}
+```
 
 ## Acknowledgement
 
