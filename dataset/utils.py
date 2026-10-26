@@ -132,10 +132,11 @@ def rescale_image_depthmap_custom(
     assert output_resolution.shape == (2,)
     scale_w = output_resolution[0] / input_resolution[0]
     scale_h = output_resolution[1] / input_resolution[1]
+    output_size = (int(output_resolution[0]), int(output_resolution[1]))
 
     # first rescale the image so that it contains the crop
     resample_algo = lanczos if (scale_w < 1 or scale_h < 1) else bicubic
-    image = image.resize(output_resolution, resample=resample_algo)
+    image = image.resize(output_size, resample=resample_algo)
     if depthmap is not None:
         raise NotImplementedError
 
